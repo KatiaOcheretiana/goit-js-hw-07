@@ -29,21 +29,31 @@ let instance
 function openOriginalImg(event) {
   event.preventDefault();
   if (!event.target.classList.contains('gallery__image')) {
-   return
+    return
   }
   
-   const urlOriginal = event.target.dataset.source;
-   instance = basicLightbox.create(`
+  const urlOriginal = event.target.dataset.source;
+  instance = basicLightbox.create(`
     <img src ="${urlOriginal}" width="800" height="600">
-`)
+`,
+  {
+    onShow: (instance) => {
+      document.addEventListener("keydown", closeModalWindow)
+    },
+    onClose: (instance) => { document.removeEventListener("keydown", closeModalWindow) },
+  }
+ )
  instance.show()
   }
 
 
-document.addEventListener("keydown", (event) => {
-  if (event.key === "Escape") {
+function closeModalWindow(event) {
+     if (event.key === "Escape") {
     instance.close();
   }
-});
+  }
+
+
 
 console.log(galleryItems);
+
